@@ -1,13 +1,18 @@
-import { authConfig } from "@/configs/auth";
-import { getServerSession } from "next-auth/next";
+import { auth, signIn } from "@/configs/auth";
 
 export default async function Profile() {
-  const session = await getServerSession(authConfig);
-
+  const session = await auth();
   return (
     <div>
       <h1>Profile of {session?.user?.name}</h1>
-      {session?.user?.image && <img src={session.user.image} alt="" />}
+      <form
+        action={async () => {
+          "use server";
+          await signIn("google");
+        }}
+      >
+        <button className="border p-4">Sign in with Google</button>
+      </form>
     </div>
   );
 }
